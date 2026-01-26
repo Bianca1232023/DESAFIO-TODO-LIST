@@ -1,14 +1,11 @@
 import React from 'react'
 import './styles.css'
 import { Checkbox as CheckIcon } from '../Icons'
-import { useState } from 'react'
-const CheckBox = () => {
 
-    const [checked, setChecked] = useState(false);
-
+const CheckBox = ({ checked, onChange }) => {
   return (
     <div className='checkbox-container'>
-        <input type="checkbox" className='checkbox' checked={checked} onChange={() => setChecked(!checked)} />
+        <input type="checkbox" className='checkbox' checked={checked} onChange={onChange} />
         {checked && <CheckIcon className='check-icon' />}
     </div>
   )

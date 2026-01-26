@@ -3,20 +3,24 @@ import './styles.css'
 import ButtonDelete from '../DeleteButton'
 import CheckBox from '../CheckBox'
 
-const TaskItem = () => {
+const TaskItem = ({ task, onDelete, onToggle }) => {
+  const isCompleted = task.completed === 'true';
+
   return (
     <li className="task-item">
       <div className="task-left">
-        <CheckBox />
-        <span className="description-list">
-          teste aaaaaaaaaaa
+        <CheckBox 
+          checked={isCompleted}
+          onChange={onToggle}
+        />
+        <span className={`description-list ${isCompleted ? 'completed' : ''}`}>
+          {task.description}
         </span>
       </div>
 
-      <ButtonDelete />
+      <ButtonDelete onClickDelete={onDelete} />
     </li>
   )
 }
-
 
 export default TaskItem

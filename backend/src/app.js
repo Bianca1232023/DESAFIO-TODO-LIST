@@ -1,5 +1,4 @@
-//import { openDb } from './configdb.js';
-
+import { openDb } from './configdb.js';
 import express from 'express';
 import {createTable , getTasks, getTask ,insertTask, updateTask , deleteTask} from './controller/task.js';
 
@@ -8,7 +7,7 @@ createTable();
 const app = express();
 const port = 3000;
 
-// Configuração de CORS
+
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');

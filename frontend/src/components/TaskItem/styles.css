@@ -1,5 +1,5 @@
 .task-item {
-  width: 100%;
+  width: 95%;
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 8px;
@@ -24,6 +24,11 @@
   font-size: 14px;
   line-height: 1.4;
   word-break: break-word;
+}
+
+.description-list.completed {
+  text-decoration: line-through;
+  color: #808080;
 }
 
 

@@ -1,5 +1,5 @@
 .task-container{
-    width: 43%;
+    width: 55%;
     border-bottom: 1px solid #333333;
     padding: 16px;
     margin-bottom: 12px;
@@ -10,11 +10,20 @@
 }
 
 .created-tasks{
-    color: #1E6F9F;
+    color: #4EA8DE;
     font-weight: bold;
 }
 
 .finished-tasks{
     color: #8284FA;
     font-weight: bold;
+}
+
+.badge {
+    background-color: #333333;
+    color: #D9D9D9;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    margin-left: 8px;
 }

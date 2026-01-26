@@ -1,0 +1,35 @@
+.task-item {
+  width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+
+  background-color: #262626;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+
+.description-list {
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+
+.task-item button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+

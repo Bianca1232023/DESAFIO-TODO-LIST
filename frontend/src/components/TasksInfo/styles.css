@@ -1,0 +1,20 @@
+.task-container{
+    width: 43%;
+    border-bottom: 1px solid #333333;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.created-tasks{
+    color: #1E6F9F;
+    font-weight: bold;
+}
+
+.finished-tasks{
+    color: #8284FA;
+    font-weight: bold;
+}

@@ -1,5 +1,0 @@
-export {Clipboard} from './clipboard'
-export {default as DeleteIcon} from './delete'
-export {Increment} from './increment'
-export {Logo} from './logo'
-export {default as Checkbox} from './checkbox'

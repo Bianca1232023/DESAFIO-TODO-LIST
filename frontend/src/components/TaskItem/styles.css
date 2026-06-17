@@ -3,13 +3,11 @@
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 8px;
-
   background-color: #262626;
-  color: white;
-
+  color: #FFFFFF;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
 
 .task-left {
@@ -19,22 +17,19 @@
   flex: 1;
 }
 
-
 .description-list {
   font-size: 14px;
   line-height: 1.4;
   word-break: break-word;
 }
-
 .description-list.completed {
   text-decoration: line-through;
   color: #808080;
 }
 
-
 .task-item button {
   background: none;
   border: none;
   cursor: pointer;
-}
-
+  padding: 0;
+}/*# sourceMappingURL=styles.css.map */

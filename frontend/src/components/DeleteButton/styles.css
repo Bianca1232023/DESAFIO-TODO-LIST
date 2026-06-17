@@ -1,6 +1,7 @@
-.delete-task{
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-}
+.delete-task {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  padding: 4px;
+}/*# sourceMappingURL=styles.css.map */

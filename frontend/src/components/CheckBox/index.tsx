@@ -11,7 +11,7 @@ interface CheckBoxProps {
 const CheckBox = ({ checked, onChange }: CheckBoxProps) => {
   return (
     <div className='checkbox-container'>
-        <input type="checkbox" className='checkbox' checked={checked} onChange={onChange} />
+        <input className='checkbox' type="checkbox" checked={checked} onChange={onChange} />
         {checked && <CheckIcon className='check-icon' />}
     </div>
   )

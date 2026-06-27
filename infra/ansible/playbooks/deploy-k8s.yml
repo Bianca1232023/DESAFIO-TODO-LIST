@@ -1,0 +1,41 @@
+---
+- name: Deploy aplicação no Kubernetes
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+
+    - name: Aplicar Namespace
+      command: kubectl apply -f ../../kubernetes/namespace.yaml
+
+    - name: Aplicar ResourceQuota
+      command: kubectl apply -f ../../kubernetes/resource-quota.yaml
+
+    - name: Aplicar LimitRange
+      command: kubectl apply -f ../../kubernetes/limit-range.yaml
+      
+    - name: Aplicar PVC
+      command: kubectl apply -f ../../kubernetes/database/pvc.yaml
+
+    - name: Aplicar Service do Banco
+      command: kubectl apply -f ../../kubernetes/database/service.yaml
+
+    - name: Aplicar StatefulSet Primary
+      command: kubectl apply -f ../../kubernetes/database/statefulset-primary.yaml
+
+    - name: Aplicar StatefulSet Secondary
+      command: kubectl apply -f ../../kubernetes/database/statefulset-secondary.yaml
+
+    - name: Aplicar Deployment
+      command: kubectl apply -f ../../kubernetes/deployment.yaml
+
+    - name: Aplicar Service
+      command: kubectl apply -f ../../kubernetes/service.yaml
+
+    - name: Aplicar Ingress
+      command: kubectl apply -f ../../kubernetes/ingress.yaml
+
+    - name: Aplicar HPA
+      command: kubectl apply -f ../../kubernetes/hpa.yaml
+  

@@ -1,3 +1,0 @@
-!!! PONTO IMPORTANTE SOBRE ESTE PROJETO !!!
-
-O projeto original utiliza SQLite. Como o objetivo do trabalho é adicionar infraestrutura sem alterar a lógica da aplicação, o banco foi mantido. O SQLite foi implantado utilizando armazenamento persistente via StatefulSet e PersistentVolumeClaim. A replicação de leitura não foi implementada porque SQLite é um banco embarcado que não oferece replicação nativa entre múltiplos pods..

@@ -1,15 +1,30 @@
+variable "subscription_id" {
+  type = string
+}
+
 variable "resource_group_name" {
-  description = "Nome do Resource Group"
-  default     = "teste-rg"
+  type = string
 }
 
 variable "location" {
-  description = "Região do Azure"
-  default     = "North Central US"
+  type = string
 }
 
 variable "public_key_path" {
-  description = "Caminho para a chave pública SSH"
-  type        = string
-  default     = "~/.ssh/bianca_projetos.pub"
+  type = string
+}
+
+variable "vm_size" {
+  type    = string
+  default = "Standard_B2ats_v2"
+}
+
+variable "admin_username" {
+  type    = string
+  default = "azureuser"
+}
+
+variable "database_password" {
+  type      = string
+  sensitive = true
 }

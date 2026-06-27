@@ -4,6 +4,7 @@
   become: true
 
   tasks:
+
     - name: Pull latest image
       command: docker pull bianca1232023/api-backend:latest
 
@@ -11,9 +12,15 @@
       command: docker rm -f api-backend
       ignore_errors: true
 
-    - name: Start new container
+    - name: Start backend container
       command: >
         docker run -d
         --name api-backend
-        -p 80:3000
+        --restart always
+        -p 3000:3000
+        -e DB_HOST=todolist-postgres.postgres.database.azure.com
+        -e DB_PORT=5432
+        -e DB_NAME=todolist
+        -e DB_USER=postgresadmin
+        -e DB_PASSWORD=123456
         bianca1232023/api-backend:latest

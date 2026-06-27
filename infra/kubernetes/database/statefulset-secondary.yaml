@@ -2,22 +2,22 @@ apiVersion: apps/v1
 kind: StatefulSet
 
 metadata:
-  name: postgres-primary
+  name: postgres-secondary
   namespace: devops-project
 
 spec:
-  serviceName: postgres-primary
+  serviceName: postgres-secondary
 
   replicas: 1
 
   selector:
     matchLabels:
-      app: postgres-primary
+      app: postgres-secondary
 
   template:
     metadata:
       labels:
-        app: postgres-primary
+        app: postgres-secondary
 
     spec:
       containers:

@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: postgres-primary
+  namespace: devops-project
+
+spec:
+  clusterIP: None
+
+  selector:
+    app: postgres-primary
+
+  ports:
+    - port: 5432
+      targetPort: 5432
+
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: postgres-secondary
+  namespace: devops-project
+
+spec:
+  clusterIP: None
+
+  selector:
+    app: postgres-secondary
+
+  ports:
+    - port: 5432
+      targetPort: 5432

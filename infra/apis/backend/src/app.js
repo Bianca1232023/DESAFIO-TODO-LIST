@@ -1,4 +1,3 @@
-import { openDb } from './configdb.js';
 import express from 'express';
 import {createTable , getTasks, getTask ,insertTask, updateTask , deleteTask} from './controller/task.js';
 

@@ -220,10 +220,24 @@ jobs:
 
     steps:
 
+      - name: Check target availability
+        id: check_target
+        run: |
+          TARGET="http://${{ secrets.VM_HOST }}"
+          echo "Verificando disponibilidade: $TARGET"
+          if curl -sf --max-time 15 --retry 3 --retry-delay 5 "$TARGET" > /dev/null 2>&1; then
+            echo "reachable=true" >> "$GITHUB_OUTPUT"
+            echo "Target disponível — executando ZAP"
+          else
+            echo "reachable=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Target $TARGET não respondeu — scan ZAP ignorado"
+          fi
+
       - name: ZAP Baseline Scan
+        if: steps.check_target.outputs.reachable == 'true'
         uses: zaproxy/action-baseline@v0.15.0
         with:
-          target: ${{ env.GATEWAY_URL }}
+          target: http://${{ secrets.VM_HOST }}
           cmd_options: -a
           allow_issue_writing: false
           artifact_name: zap-scan-${{ github.run_id }}

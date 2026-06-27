@@ -26,3 +26,18 @@
         -e DB_USER=postgresadmin
         -e DB_PASSWORD=123456
         bianca1232023/api-backend:latest
+
+    - name: Pull latest frontend image
+      command: docker pull bianca1232023/api-frontend:latest
+
+    - name: Stop old frontend container
+      command: docker rm -f api-frontend
+      ignore_errors: true
+
+    - name: Start frontend container
+      command: >
+        docker run -d
+        --name api-frontend
+        --restart always
+        -p 80:80
+        bianca1232023/api-frontend:latest

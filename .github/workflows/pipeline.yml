@@ -5,24 +5,29 @@ on:
     branches:
       - main
 
+env:
+  BACKEND_IMAGE: bianca1232023/api-backend:latest
+  FRONTEND_IMAGE: bianca1232023/api-frontend:latest
+
 jobs:
-  ci-cd:
+
+  tests:
 
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      ###################################################
+      # Backend
+      ###################################################
 
-
-      - name: Install Backend Dependencies
+      - name: Install Backend
         working-directory: infra/apis/backend
         run: npm install
 
@@ -30,12 +35,127 @@ jobs:
         working-directory: infra/apis/backend
         run: npm test
 
+      ###################################################
+      # Frontend
+      ###################################################
 
-
-      - name: Install Frontend Dependencies
+      - name: Install Frontend
         working-directory: infra/apis/frontend
         run: npm install
 
       - name: Frontend Tests
         working-directory: infra/apis/frontend
         run: npm test
+
+  security:
+
+    runs-on: ubuntu-latest
+
+    needs: tests
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Trivy Scan Backend
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: infra/apis/backend
+
+      - name: Trivy Scan Frontend
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: infra/apis/frontend
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    needs: security
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      ###################################################
+      # Backend
+      ###################################################
+
+      - name: Build Backend
+        run: |
+          docker build \
+            -t $BACKEND_IMAGE \
+            infra/apis/backend
+
+      - name: Push Backend
+        run: docker push $BACKEND_IMAGE
+
+      ###################################################
+      # Frontend
+      ###################################################
+
+      - name: Build Frontend
+        run: |
+          docker build \
+            -t $FRONTEND_IMAGE \
+            infra/apis/frontend
+
+      - name: Push Frontend
+        run: docker push $FRONTEND_IMAGE
+
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Deploy Docker
+        working-directory: infra/ansible
+        run: |
+          ansible-playbook \
+            -i hosts.ini \
+            playbooks/deploy-docker.yml
+
+      - name: Deploy Kubernetes
+        working-directory: infra/ansible
+        run: |
+          ansible-playbook \
+            -i hosts.ini \
+            playbooks/deploy-k8s.yml
+
+  notify:
+
+    runs-on: ubuntu-latest
+
+    needs: deploy
+
+    if: always()
+
+    steps:
+
+      - name: Notification
+        run: |
+          echo "Pipeline Finalizado"
+          echo "Status: ${{ job.status }}"

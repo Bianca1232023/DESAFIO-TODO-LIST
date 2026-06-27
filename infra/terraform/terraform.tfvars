@@ -6,7 +6,7 @@ location = "North Central US"
 
 public_key_path = "~/.ssh/bianca_projetos.pub"
 
-vm_size = "Standard_B2ats_v2"
+vm_size = "Standard_B2as_v2"
 
 admin_username = "azureuser"
 

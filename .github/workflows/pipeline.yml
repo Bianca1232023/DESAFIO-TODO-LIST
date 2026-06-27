@@ -120,56 +120,40 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Install Ansible
-        run: |
-          sudo apt update
-          sudo apt install -y ansible
-
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
 
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-
           chmod 600 ~/.ssh/id_rsa
 
           ssh-keyscan -H 130.131.8.46 >> ~/.ssh/known_hosts
 
-          echo "===== FILES ====="
-          ls -la ~/.ssh
-
-          echo "===== LINES ====="
-          wc -l ~/.ssh/id_rsa
-
-          echo "===== FINGERPRINT ====="
-          ssh-keygen -lf ~/.ssh/id_rsa
-
-          echo "===== CHECK PASSPHRASE ====="
-          ssh-keygen -y -P "" -f ~/.ssh/id_rsa >/dev/null && echo "SEM PASSPHRASE"
-
-          echo "===== TEST SSH ====="
+      - name: Deploy na VM
+        run: |
           ssh \
-            -vvv \
-            -o BatchMode=yes \
-            -o IdentitiesOnly=yes \
-            -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_rsa \
-            azureuser@130.131.8.46 \
-            "echo SSH_OK"
+            -o StrictHostKeyChecking=no \
+            azureuser@130.131.8.46 << 'EOF'
 
-      - name: Deploy Docker
-        working-directory: infra/ansible
-        run: |
-          ansible-playbook \
-            -i hosts.ini \
-            playbooks/deploy-docker.yml
+          set -e
 
-      - name: Deploy Kubernetes
-        working-directory: infra/ansible
-        run: |
-          ansible-playbook \
-            -i hosts.ini \
-            playbooks/deploy-k8s.yml
+          cd ~/DESAFIO-TODOLIST-VM
+
+          echo "=== Docker Pull ==="
+          docker pull bianca1232023/api-backend:latest
+          docker pull bianca1232023/api-frontend:latest
+
+          echo "=== Deploy Docker ==="
+          cd infra/ansible
+          ansible-playbook -i hosts.ini playbooks/deploy-docker.yml
+
+          echo "=== Deploy Kubernetes ==="
+          ansible-playbook -i hosts.ini playbooks/deploy-k8s.yml
+
+          echo "=== Deploy Finalizado ==="
+
+          EOF
 
   notify:
 

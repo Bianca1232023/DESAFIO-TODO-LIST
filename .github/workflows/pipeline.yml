@@ -151,6 +151,7 @@ jobs:
           ssh \
             -vvv \
             -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_rsa \
             azureuser@130.131.8.46 \

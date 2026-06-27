@@ -58,3 +58,14 @@ module "gateway" {
 
   publisher_email = "16640171783@cefet-rj.br"
 }
+
+module "kubernetes" {
+
+  source = "./modules/kubernetes"
+
+  resource_group_name = azurerm_resource_group.rg.name
+
+  location = azurerm_resource_group.rg.location
+
+  subnet_id = module.network.aks_subnet_id
+}

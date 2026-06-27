@@ -130,6 +130,12 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          echo "===== FILES ====="
+          ls -la ~/.ssh
+          echo "===== LINES ====="
+          wc -l ~/.ssh/id_rsa
+          echo "===== FINGERPRINT ====="
+          ssh-keygen -lf ~/.ssh/id_rsa
           ssh-keyscan -H 130.131.8.46 >> ~/.ssh/known_hosts
 
       - name: Deploy Docker

@@ -128,15 +128,24 @@ jobs:
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
+
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
+          ssh-keyscan -H 130.131.8.46 >> ~/.ssh/known_hosts
+
+          echo "===== TEST SSH ====="
+          ssh -vvv \
+            -i ~/.ssh/id_rsa \
+            -o StrictHostKeyChecking=no \
+            azureuser@130.131.8.46 \
+            "echo SSH_OK"
+
           echo "===== FILES ====="
           ls -la ~/.ssh
-          echo "===== LINES ====="
-          wc -l ~/.ssh/id_rsa
+
           echo "===== FINGERPRINT ====="
           ssh-keygen -lf ~/.ssh/id_rsa
-          ssh-keyscan -H 130.131.8.46 >> ~/.ssh/known_hosts
 
       - name: Deploy Docker
         working-directory: infra/ansible

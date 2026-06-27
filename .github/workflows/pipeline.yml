@@ -130,22 +130,31 @@ jobs:
           mkdir -p ~/.ssh
 
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+
           chmod 600 ~/.ssh/id_rsa
 
           ssh-keyscan -H 130.131.8.46 >> ~/.ssh/known_hosts
 
-          echo "===== TEST SSH ====="
-          ssh -vvv \
-            -i ~/.ssh/id_rsa \
-            -o StrictHostKeyChecking=no \
-            azureuser@130.131.8.46 \
-            "echo SSH_OK"
-
           echo "===== FILES ====="
           ls -la ~/.ssh
 
+          echo "===== LINES ====="
+          wc -l ~/.ssh/id_rsa
+
           echo "===== FINGERPRINT ====="
           ssh-keygen -lf ~/.ssh/id_rsa
+
+          echo "===== CHECK PASSPHRASE ====="
+          ssh-keygen -y -P "" -f ~/.ssh/id_rsa >/dev/null && echo "SEM PASSPHRASE"
+
+          echo "===== TEST SSH ====="
+          ssh \
+            -vvv \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=no \
+            -i ~/.ssh/id_rsa \
+            azureuser@130.131.8.46 \
+            "echo SSH_OK"
 
       - name: Deploy Docker
         working-directory: infra/ansible

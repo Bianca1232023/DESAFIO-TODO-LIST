@@ -1,37 +1,39 @@
-import { openDb } from "../configdb.js";
+import { pool } from "../configdb.js";
 
 export async function createTable(){
-    openDb().then(db=>{
-        db.exec('CREATE TABLE IF NOT EXISTS Tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT, completed VARCHAR(5))');
-    });
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS Tasks (
+            id        SERIAL PRIMARY KEY,
+            description TEXT,
+            completed VARCHAR(5)
+        )
+    `);
 }
 
 export async function insertTask(Task){
-    openDb().then(db=>{
-        db.run('INSERT INTO Tasks (description, completed) VALUES (?, ?)', [Task.description, Task.completed.toString()]);
-    });
+    await pool.query(
+        'INSERT INTO Tasks (description, completed) VALUES ($1, $2)',
+        [Task.description, Task.completed.toString()]
+    );
 }
 
 export async function getTask(id) {
-    return openDb().then(db=>{
-        return db.get('SELECT * FROM Tasks WHERE id = ?', [id]);
-    });
+    const result = await pool.query('SELECT * FROM Tasks WHERE id = $1', [id]);
+    return result.rows[0];
 }
 
 export async function getTasks(){
-    return openDb().then(db=>{
-        return db.all('SELECT * FROM Tasks');
-    });
+    const result = await pool.query('SELECT * FROM Tasks');
+    return result.rows;
 }
 
 export async function updateTask(id, description, completed){
-    openDb().then(db=>{
-        db.run('UPDATE Tasks SET description = ?, completed = ? WHERE id = ?', [description, completed.toString(), id]);
-    });
+    await pool.query(
+        'UPDATE Tasks SET description = $1, completed = $2 WHERE id = $3',
+        [description, completed.toString(), id]
+    );
 }
 
 export async function deleteTask(id){
-    openDb().then(db=>{
-        db.run('DELETE FROM Tasks WHERE id = ?', [id]);
-    });
+    await pool.query('DELETE FROM Tasks WHERE id = $1', [id]);
 }

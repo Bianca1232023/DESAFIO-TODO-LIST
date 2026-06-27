@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: postgres-primary-pvc
+  namespace: devops-project
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: postgres-secondary-pvc
+  namespace: devops-project
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+
+  resources:
+    requests:
+      storage: 2Gi

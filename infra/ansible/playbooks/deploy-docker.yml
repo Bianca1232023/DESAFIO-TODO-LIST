@@ -1,0 +1,19 @@
+---
+- name: Deploy API Backend
+  hosts: docker
+  become: true
+
+  tasks:
+    - name: Pull latest image
+      command: docker pull bianca1232023/api-backend:latest
+
+    - name: Stop old container
+      command: docker rm -f api-backend
+      ignore_errors: true
+
+    - name: Start new container
+      command: >
+        docker run -d
+        --name api-backend
+        -p 80:3000
+        bianca1232023/api-backend:latest

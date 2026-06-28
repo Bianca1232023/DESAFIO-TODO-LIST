@@ -58,6 +58,10 @@ app.delete('/task/:id', async(req, res) => {
     res.json({ "statusCode": 200, "message": `Task ${id} deleted` });
 });
 
-app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`App listening at http://localhost:${port}`);
+  });
+}
+
+export default app;

@@ -27,7 +27,7 @@
         -p 3000:3000
         -e DB_HOST=todolist-postgres.postgres.database.azure.com
         -e DB_PORT=5432
-        -e DB_NAME=todolist
+        -e DB_NAME=todolistdb
         -e DB_USER=postgresadmin
         -e DB_PASSWORD=123456
         bianca1232023/api-backend:latest

@@ -22,20 +22,31 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:16
+          image: bitnami/postgresql:16
 
           ports:
             - containerPort: 5432
 
           env:
-            - name: POSTGRES_DB
-              value: todolist
-
-            - name: POSTGRES_USER
-              value: postgres
-
-            - name: POSTGRES_PASSWORD
+            - name: POSTGRESQL_PASSWORD
               value: "123456"
+
+            # Replicação streaming — papel: secondary (somente leitura)
+            - name: POSTGRESQL_REPLICATION_MODE
+              value: slave
+
+            - name: POSTGRESQL_REPLICATION_USER
+              value: replicator
+
+            - name: POSTGRESQL_REPLICATION_PASSWORD
+              value: "replicatorpass"
+
+            # DNS do primary dentro do cluster K8s
+            - name: POSTGRESQL_MASTER_HOST
+              value: postgres-primary-0.postgres-primary.devops-project.svc.cluster.local
+
+            - name: POSTGRESQL_MASTER_PORT_NUMBER
+              value: "5432"
 
           resources:
             requests:
@@ -46,9 +57,25 @@ spec:
               cpu: "500m"
               memory: "512Mi"
 
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 5
+
           volumeMounts:
             - name: postgres-storage
-              mountPath: /var/lib/postgresql/data
+              mountPath: /bitnami/postgresql
 
   volumeClaimTemplates:
     - metadata:

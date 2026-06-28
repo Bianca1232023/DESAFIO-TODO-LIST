@@ -22,20 +22,30 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:16
+          image: bitnami/postgresql:16
 
           ports:
             - containerPort: 5432
 
           env:
-            - name: POSTGRES_DB
-              value: todolist
+            - name: POSTGRESQL_DATABASE
+              value: todolistdb
 
-            - name: POSTGRES_USER
+            - name: POSTGRESQL_USERNAME
               value: postgres
 
-            - name: POSTGRES_PASSWORD
+            - name: POSTGRESQL_PASSWORD
               value: "123456"
+
+            # Replicação streaming — papel: primary (escrita)
+            - name: POSTGRESQL_REPLICATION_MODE
+              value: master
+
+            - name: POSTGRESQL_REPLICATION_USER
+              value: replicator
+
+            - name: POSTGRESQL_REPLICATION_PASSWORD
+              value: "replicatorpass"
 
           resources:
             requests:
@@ -46,9 +56,25 @@ spec:
               cpu: "500m"
               memory: "512Mi"
 
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres", "-d", "todolistdb"]
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 5
+
           volumeMounts:
             - name: postgres-storage
-              mountPath: /var/lib/postgresql/data
+              mountPath: /bitnami/postgresql
 
   volumeClaimTemplates:
     - metadata:

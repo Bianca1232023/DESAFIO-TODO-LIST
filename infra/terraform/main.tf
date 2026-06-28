@@ -57,6 +57,8 @@ module "gateway" {
   publisher_name = "CEFET"
 
   publisher_email = "16640171783@cefet-rj.br"
+
+  backend_host = module.compute.public_ip
 }
 
 module "kubernetes" {

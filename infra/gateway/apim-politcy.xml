@@ -1,29 +1,40 @@
 <policies>
 
+    <!--
+        Roteamento por prefixo de caminho:
+          /api/*  → Backend Node.js (porta 3000)
+          /app/*  → Frontend React/nginx (porta 80)
+
+        Cada API no APIM tem seu próprio service_url configurado via Terraform.
+        As policies abaixo são aplicadas por API (backend_policy / frontend_policy).
+    -->
+
+    <!-- Policy aplicada à API "todolist-backend" (path = /api) -->
     <inbound>
-
         <base />
-
         <set-backend-service base-url="http://130.131.8.46:3000"/>
-
+        <cors allow-credentials="false">
+            <allowed-origins><origin>*</origin></allowed-origins>
+            <allowed-methods>
+                <method>GET</method>
+                <method>POST</method>
+                <method>PUT</method>
+                <method>DELETE</method>
+            </allowed-methods>
+            <allowed-headers><header>*</header></allowed-headers>
+        </cors>
     </inbound>
 
     <backend>
-
         <base />
-
     </backend>
 
     <outbound>
-
         <base />
-
     </outbound>
 
     <on-error>
-
         <base />
-
     </on-error>
 
 </policies>

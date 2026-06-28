@@ -1,0 +1,22 @@
+<policies>
+
+    <!-- Policy aplicada à API "todolist-frontend" (path = /app) -->
+
+    <inbound>
+        <base />
+        <set-backend-service base-url="http://130.131.8.46:80"/>
+    </inbound>
+
+    <backend>
+        <base />
+    </backend>
+
+    <outbound>
+        <base />
+    </outbound>
+
+    <on-error>
+        <base />
+    </on-error>
+
+</policies>

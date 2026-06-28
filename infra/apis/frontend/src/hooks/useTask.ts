@@ -10,9 +10,11 @@ export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskDescription, setNewTaskDescription] = useState('');
 
+  const API = import.meta.env.VITE_API_URL ?? '';
+
   const fetchTasks = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:3000/tasks");
+      const response = await fetch(`${API}/tasks`);
       const result = await response.json();
       setTasks(result.tasks || []);
     } catch (error) {
@@ -29,7 +31,7 @@ export function useTasks() {
     if (!newTaskDescription.trim()) return;
 
     try {
-      const response = await fetch("http://localhost:3000/task", {
+      const response = await fetch(`${API}/task`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +53,7 @@ export function useTasks() {
 
   async function toggleTask(id: number, description: string, completed: string) {
     try {
-      const response = await fetch(`http://localhost:3000/task/${id}`, {
+      const response = await fetch(`${API}/task/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -71,7 +73,7 @@ export function useTasks() {
 
   async function deleteTask(id: number) {
     try {
-      const response = await fetch(`http://localhost:3000/task/${id}`, {
+      const response = await fetch(`${API}/task/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {

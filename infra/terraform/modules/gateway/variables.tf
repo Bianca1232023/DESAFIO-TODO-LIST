@@ -13,3 +13,8 @@ variable "publisher_name" {
 variable "publisher_email" {
   type = string
 }
+
+variable "backend_host" {
+  type        = string
+  description = "IP ou hostname da VM que hospeda as APIs"
+}

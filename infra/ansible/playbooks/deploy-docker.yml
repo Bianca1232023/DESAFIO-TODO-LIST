@@ -7,6 +7,10 @@
 
   tasks:
 
+    - name: Criar rede Docker compartilhada
+      command: docker network create todolist-net
+      ignore_errors: true
+
     - name: Pull latest image
       command: docker pull bianca1232023/api-backend:latest
 
@@ -18,6 +22,7 @@
       command: >
         docker run -d
         --name api-backend
+        --network todolist-net
         --restart always
         -p 3000:3000
         -e DB_HOST=todolist-postgres.postgres.database.azure.com
@@ -38,6 +43,7 @@
       command: >
         docker run -d
         --name api-frontend
+        --network todolist-net
         --restart always
         -p 80:80
         bianca1232023/api-frontend:latest

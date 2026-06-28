@@ -1,11 +1,1 @@
-import { describe, it, expect } from 'vitest';
-
-describe('Frontend', () => {
-
-    it('Teste simples', () => {
-
-        expect(true).toBe(true);
-
-    });
-
-});
+// Testes migrados para frontend.test.jsx (suporte a JSX)

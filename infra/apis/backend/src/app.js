@@ -5,7 +5,8 @@ createTable();
 
 const app = express();
 const port = 3000;
-
+// infra/apis/backend/src/app.js
+const DB_PASSWORD = 'Senha@123'; // SonarQube: Hardcoded credential
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

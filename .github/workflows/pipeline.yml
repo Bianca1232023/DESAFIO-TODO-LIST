@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - demo-quality-gate
 
 env:
   BACKEND_IMAGE: bianca1232023/api-backend:latest
@@ -118,6 +119,8 @@ jobs:
         with:
           scan-type: fs
           scan-ref: infra/apis/backend
+          exit-code: 1
+          severity: 'CRITICAL,HIGH,'
 
       - name: Trivy Scan Frontend
         uses: aquasecurity/trivy-action@master

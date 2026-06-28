@@ -183,6 +183,15 @@ jobs:
 
           ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Sincronizar playbooks na VM
+        run: |
+          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+            infra/ansible/playbooks/deploy-docker.yml \
+            azureuser@${{ secrets.VM_HOST }}:~/DESAFIO-TODOLIST-VM/infra/ansible/playbooks/deploy-docker.yml
+          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+            infra/ansible/playbooks/deploy-k8s.yml \
+            azureuser@${{ secrets.VM_HOST }}:~/DESAFIO-TODOLIST-VM/infra/ansible/playbooks/deploy-k8s.yml
+
       - name: Deploy na VM
         run: |
           ssh \
